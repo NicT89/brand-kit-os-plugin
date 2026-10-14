@@ -20,27 +20,24 @@ Connect your Brand Kit OS brand kits to Claude. This plugin gives Claude real-ti
 
 **Note:** MCP access requires a Base or Premium subscription.
 
-### 2. Set your environment variable
+### 2. Install the plugin
 
-Add your API key as an environment variable named `BRAND_KIT_OS_API_KEY`.
+In Claude Code, add this marketplace and install the plugin:
 
-**macOS/Linux** (add to `~/.zshrc` or `~/.bashrc`):
-```bash
-export BRAND_KIT_OS_API_KEY="bk_your_key_here"
+```
+/plugin marketplace add NicT89/brand-kit-os-plugin
+/plugin install brand-kit-os@brand-kit-os
 ```
 
-**Windows** (PowerShell):
-```powershell
-[System.Environment]::SetEnvironmentVariable("BRAND_KIT_OS_API_KEY", "bk_your_key_here", "User")
-```
+When prompted, paste your API key. It is stored securely and used only to connect to Brand Kit OS.
 
-### 3. Install the plugin
+### 3. Restart Claude
 
-Install the `brand-kit-os.plugin` file in Claude Desktop or Cowork. The plugin will automatically configure the MCP server connection using your API key.
+After installing, restart Claude. The plugin will connect to your Brand Kit OS account and load your brand context before your first brand-related task.
 
-### 4. Restart Claude
+### Updating
 
-After installing and setting the environment variable, restart Claude. The plugin will connect to your Brand Kit OS account and load your brand context on session start.
+Run `/plugin marketplace update brand-kit-os` to pull the latest version.
 
 ## Components
 
@@ -49,7 +46,7 @@ After installing and setting the environment variable, restart Claude. The plugi
 | MCP Server | brand-kit-os | Connects to the Brand Kit OS API (11 tools for reading brand data) |
 | Skill | brand-context | Loads and manages brand kit data throughout conversations |
 | Skill | brand-voice-enforcement | Applies brand guidelines to content creation and reviews |
-| Hook | SessionStart | Auto-loads essential brand context when a session begins |
+| Hook | SessionStart | Tells Claude to load your brand context before the first brand-related task |
 
 ## Available MCP Tools
 
@@ -85,7 +82,7 @@ Once connected, Claude can use these tools:
 
 - **"Invalid API key" error**: Your key may have expired. Generate a new one in Brand Kit OS Settings.
 - **"Subscription required" error**: MCP access requires a paid plan (Base or Premium).
-- **No brand data loading**: Make sure the `BRAND_KIT_OS_API_KEY` environment variable is set and Claude has been restarted.
+- **No brand data loading**: Check your API key with `/plugin` (reconfigure the plugin to re-enter it), then restart Claude.
 - **Rate limiting**: The API allows 100 requests per minute. If you hit this limit, wait a moment and try again.
 
 ## Support
