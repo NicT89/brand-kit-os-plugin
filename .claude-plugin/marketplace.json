@@ -1,0 +1,19 @@
+{
+  "name": "brand-kit-os",
+  "owner": {
+    "name": "Nicolas Thatcher",
+    "url": "https://brandkitos.com"
+  },
+  "metadata": {
+    "description": "Brand Kit OS plugin for Claude: brand context and voice enforcement.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "brand-kit-os",
+      "source": "./plugins/brand-kit-os",
+      "description": "Connect your Brand Kit OS brand kits to Claude. Loads brand context and enforces brand voice.",
+      "version": "0.1.0"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "brand-kit-os",
+  "version": "0.1.0",
+  "description": "Connect your Brand Kit OS brand kits to Claude. Auto-loads brand context, enforces brand voice, and gives Claude real-time access to your brand identity, audience, messaging, and guidelines.",
+  "author": {
+    "name": "Brand Kit OS",
+    "url": "https://brandkitos.com"
+  },
+  "homepage": "https://brandkitos.com",
+  "repository": "https://github.com/RealBlock-AI/brand-kit-os",
+  "keywords": ["brand", "brand-kit", "voice", "tone", "guidelines", "marketing", "content"]
+}

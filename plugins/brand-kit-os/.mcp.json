@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "brand-kit-os": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@anthropic-ai/mcp-remote",
+        "https://fupwpcqmyykfiuakjxxc.supabase.co/functions/v1/mcp-server",
+        "--header",
+        "Authorization: Bearer ${BRAND_KIT_OS_API_KEY}"
+      ]
+    }
+  }
+}

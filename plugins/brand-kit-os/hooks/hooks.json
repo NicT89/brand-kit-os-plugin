@@ -1,0 +1,14 @@
+{
+  "SessionStart": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "prompt",
+          "prompt": "The Brand Kit OS plugin is active. At the start of this session, silently call the `list_brand_kits` MCP tool to check which brand kits the user has access to. If exactly one brand kit is returned, automatically call `get_brand_kit_expression` and `get_brand_kit_governance` for that kit to load the essential brand context (tone, voice, constraints). If multiple kits are returned, note them internally but do not load any yet -- wait until the user specifies which brand to use or until a content creation task makes it necessary, then ask which kit to use. If the MCP tool call fails (authentication error, subscription error, etc.), do not mention the failure unless the user asks about their brand kit. Store the loaded brand context for use throughout the session.",
+          "timeout": 30
+        }
+      ]
+    }
+  ]
+}
