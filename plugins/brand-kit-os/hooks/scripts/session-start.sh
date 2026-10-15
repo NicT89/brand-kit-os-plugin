@@ -8,7 +8,7 @@ set -euo pipefail
 
 cat <<'MSG'
 BRAND KIT OS: plugin active.
-Before your first brand, content, or Leafpad task this session, call the brand-kit-os
+Before your first brand or content task this session, call the brand-kit-os
 `get_agent_briefing` tool with no arguments to list the user's brand kits.
 - Exactly one kit: call `get_agent_briefing` again with its brand_kit_id and use the
   section health and recommended_next_steps it returns.
