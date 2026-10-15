@@ -43,28 +43,35 @@ Run `/plugin marketplace update brand-kit-os` to pull the latest version.
 
 | Component | Name | Purpose |
 |-----------|------|---------|
-| MCP Server | brand-kit-os | Connects to the Brand Kit OS API (11 tools for reading brand data) |
+| MCP Server | brand-kit-os | Connects to the Brand Kit OS API to read and update your brand kits |
 | Skill | brand-context | Loads and manages brand kit data throughout conversations |
 | Skill | brand-voice-enforcement | Applies brand guidelines to content creation and reviews |
+| Agent | content-generation | Writes brand-aligned emails, proposals, posts, ads, and landing pages |
+| Agent | brand-review | Reviews existing content against your brand standards |
+| Agent | audience-adaptation | Tailors content to a specific audience persona |
+| Agent | quality-assurance | Final compliance check before content is delivered |
+| Command | /create-content | Generate brand-aligned content for a content type, audience, and topic |
+| Command | /enforce-voice | Load your brand guidelines and apply them to a request |
 | Hook | SessionStart | Tells Claude to load your brand context before the first brand-related task |
 
 ## Available MCP Tools
 
-Once connected, Claude can use these tools:
+Once connected, Claude can use the full Brand Kit OS tool set, starting with:
 
 | Tool | Description |
 |------|-------------|
+| `get_agent_briefing` | Start here: lists your brand kits, or gives one kit's health and recommended next steps |
 | `list_brand_kits` | List all brand kits you have access to |
-| `get_brand_kit` | Get complete brand kit with all sections |
-| `get_brand_kit_core` | Mission, vision, and brand story |
-| `get_brand_kit_personality` | Traits, values, and principles |
 | `get_brand_kit_expression` | Tone of voice, verbal style, and archetypes |
-| `get_brand_kit_products` | Products and services |
-| `get_brand_kit_audience` | Target audience personas |
 | `get_brand_kit_governance` | Constraints, taboo topics, and compliance |
-| `get_brand_kit_personas` | AI persona configurations |
-| `list_knowledge_files` | Knowledge files for a brand kit |
-| `get_knowledge_file` | Specific knowledge file details |
+| `get_brand_kit_audience` | Target audience personas |
+| `get_brand_kit_products` | Products and services |
+
+See the [developer documentation](https://brandkitos.com/documentation) for the complete list.
+
+## Publishing to Leafpad
+
+For blog publishing, topic research, and content calendars on Leafpad, install the companion plugin instead: [brand-kit-os-plugin-leafpad](https://github.com/NicT89/brand-kit-os-plugin-leafpad). It includes everything in this plugin plus the Leafpad workflows.
 
 ## Usage Examples
 
