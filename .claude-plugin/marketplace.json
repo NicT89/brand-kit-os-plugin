@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Brand Kit OS plugin for Claude: brand context and voice enforcement.",
-    "version": "0.2.0"
+    "version": "0.3.0"
   },
   "plugins": [
     {
       "name": "brand-kit-os",
       "source": "./plugins/brand-kit-os",
       "description": "Connect your Brand Kit OS brand kits to Claude. Loads brand context and enforces brand voice.",
-      "version": "0.2.0"
+      "version": "0.3.0"
     }
   ]
 }

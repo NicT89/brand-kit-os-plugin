@@ -88,7 +88,7 @@ After fetching brand data, organize it into a working reference. The key section
 ## Error Handling
 
 If an MCP tool call fails:
-- Authentication error (401): Tell the user their API key may be invalid or expired. Direct them to Brand Kit OS Settings to generate a new key.
-- Subscription error (403): Tell the user MCP access requires a Base or Premium plan.
+- Authentication error (401): Tell the user the Brand Kit OS connection needs signing in. In Claude Code they run `/mcp`, select brand-kit-os and choose Authenticate; in Claude Desktop or Cowork they click Connect when prompted.
+- Access error (403): Tell the user the server could not authorise their account. This is not a plan limit: every plan, including free, can connect. Ask them to contact Brand Kit OS support.
 - Rate limit (429): Wait 60 seconds and retry, or inform the user.
 - Not found (404): The brand kit ID may be incorrect. Call `list_brand_kits` to find valid IDs.
