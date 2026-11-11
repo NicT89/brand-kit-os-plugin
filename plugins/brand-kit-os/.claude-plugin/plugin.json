@@ -1,6 +1,6 @@
 {
   "name": "brand-kit-os",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Connect your Brand Kit OS brand kits to Claude. Auto-loads brand context, enforces brand voice, and gives Claude real-time access to your brand identity, audience, messaging, and guidelines.",
   "author": {
     "name": "Brand Kit OS",
