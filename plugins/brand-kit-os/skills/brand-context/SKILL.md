@@ -1,37 +1,28 @@
 ---
 name: brand-context
-description: >
-  Load and manage Brand Kit OS brand context for conversations. This skill should be used when
-  the user asks to "load my brand kit", "connect my brand", "use my brand voice",
-  "get my brand context", "show my brand guidelines", "what brands do I have",
-  "pull my brand data", "fetch brand info", or any request involving retrieving
-  brand identity, voice, audience, or messaging data from Brand Kit OS.
-  Also triggers when the user references their brand kit by name or asks Claude
-  to write content that should align with their brand.
-version: 0.1.0
+description: Load Brand Kit OS context (summary, expression, governance, audience, products) at the right level of detail for the current task. Activates when the user asks about their brand or starts any content-creation task.
 ---
 
-# Brand Context Loader
+# Brand Context — Skill
 
-Fetch and structure brand kit data from Brand Kit OS so Claude can produce on-brand content.
+## Purpose
+Guide Claude on **when** and **how** to load specific sections of a Brand Kit OS brand kit so that every response is grounded in real brand data.
 
-## Available MCP Tools
+## When to activate
+- The user asks about their brand, voice, audience, products, or guidelines.
+- The user starts a content-creation task (blog post, email, social caption, ad copy, landing page, etc.).
+- The user asks Claude to review or critique existing content for brand alignment.
 
-The Brand Kit OS MCP server exposes these tools. Use them to retrieve specific sections of a user's brand kit:
+## Loading strategy
 
-| Tool | Purpose | When to use |
-|------|---------|-------------|
-| `list_brand_kits` | List all brand kits the user can access | When you need to find which brand kits exist or let the user choose one |
-| `get_brand_kit` | Fetch the complete brand kit with all sections | When the user wants full context loaded or you need comprehensive brand data |
-| `get_brand_kit_core` | Mission, vision, brand story, promises | When writing about the company's purpose or positioning |
-| `get_brand_kit_personality` | Traits, values, principles, moods | When you need to match the brand's character in content |
-| `get_brand_kit_expression` | Tone of voice, verbal style, archetypes, visual style | When writing any content -- this is the most commonly needed section |
-| `get_brand_kit_products` | Products and services | When referencing offerings, features, pricing, or differentiators |
-| `get_brand_kit_audience` | Target audience personas | When tailoring content to specific reader segments |
-| `get_brand_kit_governance` | Constraints, taboo topics, compliance notes, claims to avoid | When you need to ensure content stays within brand guardrails |
-| `get_brand_kit_personas` | AI persona configurations | When the user wants Claude to adopt a specific brand persona |
-| `list_knowledge_files` | Knowledge files attached to a brand kit | When you need supplementary brand reference material |
-| `get_knowledge_file` | Specific knowledge file metadata | When retrieving a particular reference document |
+| User intent | Tool(s) to call | Why |
+|---|---|---|
+| Quick context / "What's my brand about?" | `get_brand_kit_summary` | Returns a compact overview (~500 tokens). |
+| Content creation (any format) | `get_brand_kit_expression` + `get_brand_kit_governance` | Voice rules + constraints are the minimum for on-brand writing. |
+| Audience-targeted content | Above + `get_brand_kit_audience` | Adds persona details for targeting. |
+| Product-focused content | Above + `get_brand_kit_products` | Adds product catalog, USPs, differentiators. |
+| Full brand deep-dive | `get_brand_kit` | Returns everything. Use sparingly — large payload. |
+| Knowledge file reference | `list_knowledge_files` → `get_knowledge_file` | When user references a specific doc or style guide. |
 
 ## Loading Strategy
 
@@ -92,3 +83,8 @@ If an MCP tool call fails:
 - Access error (403): Tell the user the server could not authorise their account. This is not a plan limit: every plan, including free, can connect. Ask them to contact Brand Kit OS support.
 - Rate limit (429): Wait 60 seconds and retry, or inform the user.
 - Not found (404): The brand kit ID may be incorrect. Call `list_brand_kits` to find valid IDs.
+## Rules
+1. **Always start light.** Call `get_brand_kit_summary` first unless the task clearly needs deeper data.
+2. **Layer on demand.** If the user's request expands, load the next relevant section — don't re-fetch the full kit.
+3. **Cite the source.** When applying a brand rule, mention it briefly (e.g., "Per your governance guidelines…").
+4. **Respect multiple kits.** If `list_brand_kits` returns more than one, ask the user which kit to use before loading data.

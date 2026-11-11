@@ -1,57 +1,31 @@
 # Brand Voice Enforcement Checklist
 
-Use this checklist when reviewing content for brand compliance. Go through each section systematically.
+Use this checklist before delivering any brand-aligned content.
 
-## 1. Tone Check
+## Pre-flight checks
 
-- [ ] Content matches all listed tone descriptors from expression data
-- [ ] Formality level is consistent throughout
-- [ ] Humor level is appropriate (not more or less than specified)
-- [ ] Reading level matches the target setting
+- [ ] **Brand kit loaded** — Is the correct brand kit's expression and governance data in context?
+- [ ] **Topic relevance** — Did topic-scout score ≥ 40? If refuse, do not write (see `agents/topic-scout.md`).
+- [ ] **Audience identified** — Is the content targeting a specific persona or general audience?
+- [ ] **Platform known** — Is the content for a specific channel (email, social, blog, ad)?
 
-## 2. Language Compliance
+## Voice & tone
 
-- [ ] All do-phrases are incorporated where natural
-- [ ] No dont-phrases appear anywhere in the content
-- [ ] Preferred terminology is used (check preferred_terminology array)
-- [ ] No jargon that conflicts with the reading level setting
+- [ ] Tone dimensions match brand settings (formal/casual, serious/playful, etc.)
+- [ ] Voice archetype is consistent throughout
+- [ ] Preferred terminology is used (check `preferred_terminology`)
+- [ ] Avoided words/phrases are not present (check `negative_directory`)
 
-## 3. Constraint Compliance
+## Governance
 
-- [ ] No taboo topics are mentioned or alluded to
-- [ ] No claims-to-avoid are stated or implied
-- [ ] Required disclaimers are included where applicable
-- [ ] Compliance notes are respected (industry regulations, etc.)
+- [ ] No blacklisted claims or promises
+- [ ] Compliance notes observed (regulatory, legal)
+- [ ] Disclosure policy followed (AI disclosure, disclaimers)
+- [ ] Behavioral constraints respected
 
-## 4. Audience Alignment
+## Quality
 
-- [ ] Content addresses the target persona's pain points
-- [ ] Language matches the persona's sophistication level
-- [ ] Channel-appropriate format and length
-- [ ] Goals and values are reflected in the messaging
-
-## 5. Brand Identity
-
-- [ ] Positioning/mission is reflected in the overall message
-- [ ] Value propositions are accurately represented
-- [ ] Differentiators are highlighted when relevant
-- [ ] Brand story elements are woven in naturally (not forced)
-
-## 6. Visual and Structural
-
-- [ ] If suggesting visual elements, they align with visual_style settings
-- [ ] Color references match the brand palette
-- [ ] Typography suggestions match heading/body font settings
-- [ ] Visual do/dont guidelines are respected
-
-## Scoring Guide
-
-Rate each section 1-5:
-- 5: Perfectly aligned, no changes needed
-- 4: Minor adjustments, overall strong
-- 3: Acceptable but could better reflect the brand
-- 2: Noticeable misalignment, needs revision
-- 1: Off-brand, requires significant rewrite
-
-Overall brand compliance score = average across all applicable sections.
-Target: 4.0 or higher for published content.
+- [ ] Content serves the stated purpose
+- [ ] Call-to-action is clear (if applicable)
+- [ ] Length is appropriate for the platform
+- [ ] Formatting follows brand visual style guidelines
