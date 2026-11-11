@@ -29,3 +29,7 @@ Guide Claude on **when** and **how** to load specific sections of a Brand Kit OS
 2. **Layer on demand.** If the user's request expands, load the next relevant section — don't re-fetch the full kit.
 3. **Cite the source.** When applying a brand rule, mention it briefly (e.g., "Per your governance guidelines…").
 4. **Respect multiple kits.** If `list_brand_kits` returns more than one, ask the user which kit to use before loading data.
+
+## Connection errors
+- **401 / needs sign-in:** Brand Kit OS is not signed in. In Claude Code the user runs `/mcp`, selects `brand-kit-os` and chooses Authenticate; in Claude Desktop or Cowork they click Connect.
+- **403:** not a plan limit; every plan, including free, can connect. Have the user sign in again once; if it persists, ask them to contact Brand Kit OS support.

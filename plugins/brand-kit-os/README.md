@@ -11,29 +11,29 @@ Connect your Brand Kit OS brand kits to Claude. This plugin gives Claude real-ti
 
 ## Setup
 
-### 1. Get your API key
+You need a Brand Kit OS account. The free plan works; no API key is needed.
 
-1. Log in to [Brand Kit OS](https://brandkitos.com)
-2. Go to **Settings** and select the **API Keys** tab
-3. Click **Create API Key** and copy the key (it starts with `bk_`)
-4. Save the key securely. It is only shown once.
+### 1. Install the plugin
 
-**Note:** MCP access requires a Base or Premium subscription.
+**Claude Desktop or Cowork:** open **Customize**, then **Plugins**. Click **Add**,
+choose **Add marketplace**, then **Add from a repository**, and enter
+`NicT89/brand-kit-os-plugin`. Install the **brand-kit-os** plugin it lists.
 
-### 2. Install the plugin
-
-In Claude Code, add this marketplace and install the plugin:
+**Claude Code:** run these two commands.
 
 ```
 /plugin marketplace add NicT89/brand-kit-os-plugin
 /plugin install brand-kit-os@brand-kit-os
 ```
 
-When prompted, paste your API key. It is stored securely and used only to connect to Brand Kit OS.
+### 2. Sign in
 
-### 3. Restart Claude
+The first time Claude uses Brand Kit OS it asks you to sign in. In Claude
+Desktop or Cowork, click **Connect** when it appears. In Claude Code, run `/mcp`,
+select **brand-kit-os** and choose **Authenticate**. Sign in to Brand Kit OS in
+the browser window that opens and approve the connection.
 
-After installing, restart Claude. The plugin will connect to your Brand Kit OS account and load your brand context before your first brand-related task.
+The connection renews itself, so you only sign in once.
 
 ### Updating
 
@@ -87,9 +87,8 @@ For blog publishing, topic research, and content calendars on Leafpad, install t
 
 ## Troubleshooting
 
-- **"Invalid API key" error**: Your key may have expired. Generate a new one in Brand Kit OS Settings.
-- **"Subscription required" error**: MCP access requires a paid plan (Base or Premium).
-- **No brand data loading**: Check your API key with `/plugin` (reconfigure the plugin to re-enter it), then restart Claude.
+- **Asked to sign in again**: Sign in once more. In Claude Code, `/mcp` then **Authenticate**.
+- **No brand data loading**: In Claude Code, run `/mcp` and check that **brand-kit-os** shows as connected. If it does not, choose **Authenticate**.
 - **Rate limiting**: The API allows 100 requests per minute. If you hit this limit, wait a moment and try again.
 
 ## Support
