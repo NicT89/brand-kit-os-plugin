@@ -15,19 +15,20 @@ Validates content against brand standards before delivery. Performs structured c
 
 ## Workflow
 
-1. **Load validation baseline** — Call `get_brand_kit_expression` and `get_brand_kit_governance` if not already in context
-2. **Run enforcement checklist** — Evaluate content against every item in `skills/brand-voice-enforcement/references/enforcement-checklist.md`
-3. **Check terminology** — Scan for prohibited terms from the negative directory and verify preferred terminology usage
-4. **Verify governance** — Confirm no blacklisted claims, compliance notes observed, disclosure policy followed
-5. **Assess completeness** — Ensure content serves its stated purpose with appropriate length and formatting for the platform
-6. **Return verdict** — Pass, Needs Revision, or Fail with specific findings
+1. **Load validation baseline** — Call `get_brand_kit` with `sections: ["expression", "governance", "anti_slop_rules"]` if not already in context
+2. **Run the automated check** — Call `check_draft` on the content (with the `platform` if known). Any hard violation is a Critical finding
+3. **Run enforcement checklist** — Evaluate content against every item in `skills/brand-voice-enforcement/references/enforcement-checklist.md`
+4. **Check terminology** — Scan for prohibited terms from the negative directory and verify preferred terminology usage
+5. **Verify governance** — Confirm no blacklisted claims, compliance notes observed, disclosure policy followed
+6. **Assess completeness** — Ensure content serves its stated purpose with appropriate length and formatting for the platform
+7. **Return verdict** — Pass, Needs Revision, or Fail with specific findings
 
 ## MCP tools used
 
 | Tool | Purpose |
 |------|---------|
-| `get_brand_kit_expression` | Voice rules, terminology lists, tone dimensions |
-| `get_brand_kit_governance` | Constraints, negative directory, compliance, disclosure |
+| `get_brand_kit` with `sections: ["expression", "governance", "anti_slop_rules"]` | Voice rules, terminology lists, tone dimensions, constraints, negative directory, compliance, disclosure, anti-slop rules |
+| `check_draft` | Deterministic check against the kit's writing rules; lists what it could not test |
 
 ## Output format
 

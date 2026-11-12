@@ -4,23 +4,23 @@ Use this checklist before delivering any brand-aligned content.
 
 ## Pre-flight checks
 
-- [ ] **Brand kit loaded** — Is the correct brand kit's expression and governance data in context?
-- [ ] **Topic relevance** — Did topic-scout score ≥ 40? If refuse, do not write (see `agents/topic-scout.md`).
-- [ ] **Audience identified** — Is the content targeting a specific persona or general audience?
-- [ ] **Platform known** — Is the content for a specific channel (email, social, blog, ad)?
+- [ ] **Brand kit loaded.** Is the correct brand kit's expression and governance data in context?
+- [ ] **Audience identified.** Is the content targeting a specific persona or a general audience?
+- [ ] **Platform known.** Is the content for a specific channel (email, social, blog, ad)?
 
 ## Voice & tone
 
-- [ ] Tone dimensions match brand settings (formal/casual, serious/playful, etc.)
+- [ ] Tone matches the brand's `tone_dimensions`
 - [ ] Voice archetype is consistent throughout
 - [ ] Preferred terminology is used (check `preferred_terminology`)
-- [ ] Avoided words/phrases are not present (check `negative_directory`)
+- [ ] Avoided words and phrases are not present (check `negative_directory`)
 
 ## Governance
 
-- [ ] No blacklisted claims or promises
-- [ ] Compliance notes observed (regulatory, legal)
-- [ ] Disclosure policy followed (AI disclosure, disclaimers)
+- [ ] `check_draft` returns no hard violations
+- [ ] No banned claims or promises
+- [ ] Selected compliance standards observed
+- [ ] Disclosure statements followed (AI disclosure, disclaimers)
 - [ ] Behavioral constraints respected
 
 ## Quality
@@ -28,4 +28,4 @@ Use this checklist before delivering any brand-aligned content.
 - [ ] Content serves the stated purpose
 - [ ] Call-to-action is clear (if applicable)
 - [ ] Length is appropriate for the platform
-- [ ] Formatting follows brand visual style guidelines
+- [ ] Formatting follows the brand's visual style guidelines

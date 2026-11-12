@@ -1,167 +1,114 @@
-# Brand Kit OS — Data Model Reference
+# Brand Kit OS: Data Model Reference
 
-This document describes the data structure returned by Brand Kit OS MCP tools.
+How a brand kit is structured, how to read each part, and which tool writes it. Tool names here match the Brand Kit OS MCP server, version 3.
 
-## Brand Kit Sections
+When in doubt, call `get_agent_briefing` with `include: ["tool_map"]`. It returns the live map of which tools read and write each section, and it is the source of truth if this file ever falls behind.
 
-### Summary (`get_brand_kit_summary`)
-A compact overview (~500 tokens). **Live shape (Brand Kit OS kit):**
+## Reading
+
+All reads go through one tool: `get_brand_kit`.
+
+- No `sections`: returns the compact summary plus `available_sections`.
+- `sections: [...]`: returns only those sections.
+- `sections: ["all"]`: the whole kit. Large.
+- `fields`: optional subset of top-level field names, for sections that support it.
+- `filter`: optional list filters (for example knowledge files by category, visual assets by media).
+- `platform`: with `platform_expressions`, returns expression merged with that platform's overrides.
+- `view: "index"`: with `ai_personas`, returns a slim list.
+
+For a task-shaped bundle, use `get_brand_context_for_agent` (for example `task_type: "content_generation"` with a `platform`).
+
+### Summary (default read)
 
 | Field | Type | Notes |
 |-------|------|-------|
-| `name`, `tagline`, `description`, `brand_voice`, `mission`, `vision` | string | May be empty string |
-| `top_personality_traits` | string[] | Max 3 trait names |
-| `top_values` | string[] | Max 3 value names |
-| `tone` | object | From `tone_of_voice` JSONB (`attributes[]`, `description`) |
-| `tone_dimensions` | object | e.g. `energy`, `warmth`, `formality`, `complexity`, `confidence` (0–100) |
-| `top_constraints` | array | Max 3 from governance |
+| `name`, `tagline`, `description`, `brand_voice`, `mission`, `vision` | string | May be empty |
+| `top_personality_traits` | string[] | Up to 3 trait names |
+| `top_values` | string[] | Up to 3 value names |
+| `tone` | object | Legacy `attributes[]` and `description` |
+| `tone_dimensions` | object | 0 to 100 scales: `energy`, `formality`, `warmth`, `confidence`, `complexity`, optional `humor`. Authoritative when it overlaps `tone` |
+| `top_constraints` | array | Up to 3 from governance |
 | `products` | `{ name, type, usp }[]` | |
-| `primary_audiences` | `{ persona_name, persona_type, demographics }[]` | `is_primary` only |
+| `primary_audiences` | `{ persona_name, persona_type, demographics }[]` | |
 
-**Example tone_dimensions:** `{ "energy": 60, "warmth": 25, "formality": 30, "complexity": 20, "confidence": 65 }`
+## Sections
 
-**Example voice_archetypes (expression):** `primary.name` = "The Assistant", `secondary.name` = "The Synthesizer"
+### Single-row sections (written with `update_brand_kit`)
 
-### Brand Kit Root (`update_brand_kit`) — writable
-- **Name** — Brand name
-- **Description** — Brand description
-- **Tagline** — Brand tagline
-- **Website URL** — Brand website
-- **Social URLs** — JSONB array of `{ platform, url }` objects
-- **Industry Details** — JSONB with sector, sub_sector, niche
+Pass one object per section to change. Only the fields you send are written. Lists are edited card by card: `{ add, update, archive, restore }`.
 
-### Visual Identity (`update_brand_kit_visuals`) — writable
-- **Colors** — `primary_color`, `secondary_color`, `accent_color`, `background_color`, `text_primary_color`, `text_secondary_color`, `link_color`, `color_scheme`, `color_details`, `custom_1-4_color`, `custom_1-4_name`
-- **Fonts** — `heading_font`, `body_font`, `paragraph_font`, `font_sizes` (JSONB), `font_weights` (JSONB), `fonts_list` (JSONB array)
-- **Layout** — `spacing` (JSONB), `button_styles` (JSONB)
-- **Logos** — `logo_url`, `logo_dark_url`, `favicon_url`
+| Section | Read | Write | Holds |
+|---|---|---|---|
+| Basics | default summary | `update_brand_kit` with `basics` | Name, description, long summary, tagline, website URL, social URLs, industry details, OG image |
+| Core | `sections: ["core"]` | `update_brand_kit` with `core` | Mission, vision, brand story, brand promises, taglines (each with a use-when), storytelling elements, industry classification |
+| Personality | `sections: ["personality"]` | `update_brand_kit` with `personality` | Personality traits (title, description, tags, what the trait must not become, an example), brand values, brand principles, brand moods |
+| Expression | `sections: ["expression"]` | `update_brand_kit` with `expression` | Brand voice, tone of voice, `tone_dimensions`, voice archetypes, verbal style slots, visual style slots, preferred terminology, per-platform overrides |
+| Governance | `sections: ["governance"]` | `update_brand_kit` with `governance` | Behavioral constraints, negative directory, writing constraints, platform rules, compliance selections, disclosure statements, usage guidelines, drift prevention prompts |
+| Visuals | `sections: ["visuals"]` | `update_brand_kit` with `visuals` | Colors with usage guidance, fonts, spacing, logo URLs, optional design tokens |
+| SEO | `sections: ["seo"]` | `update_brand_kit` with `seo` | Keywords, tags, suggested keywords |
 
-### Core (`get_brand_kit_core` / `upsert_brand_kit_core`)
-- **Mission** — The brand's purpose
-- **Vision** — The brand's aspirational future state
-- **Brand Story** — Narrative arc of the brand (JSONB with structured content)
-- **Brand Promises** — Commitments the brand makes to its audience
-- **Taglines** — Array of brand taglines and slogans
-- **Storytelling Elements** — Brand narrative and storytelling (JSONB) with keys: `origin_story_summary`, `key_milestones` (string[]), `recurring_themes` (string[]), `brand_metaphors` (string[]), `hero_narrative`, `transformation_arc`, `founder_voice_notes`
+Notes:
+- **Storytelling elements** has keys `origin_story_summary`, `key_milestones`, `recurring_themes`, `brand_metaphors`, `hero_narrative`, `transformation_arc`, `founder_voice_notes`.
+- **Verbal style** and **visual style** are keyed by slot (`slot_1` to `slot_5`). Each slot is a full template with a name and a use-when.
+- **Voice archetypes**: look up options with `get_reference` (`library: "archetypes"`) and link by `archetype_id`.
+- **Compliance**: pick standards from `get_reference` (`library: "compliance_standards"`). The free-text compliance and disclosure fields are deprecated.
+- **Platform values** for governance rules come from `get_reference` (`library: "governance_platforms"`).
 
-### Personality (`get_brand_kit_personality` / `upsert_brand_kit_personality`)
-- **Personality Traits** — Human characteristics attributed to the brand
-- **Brand Values** — Core values that guide decision-making
-- **Brand Principles** — Actionable rules derived from values
-- **Brand Moods** — Emotional tones associated with the brand
+### Collections (each has its own tool)
 
-### Expression (`get_brand_kit_expression` / `upsert_brand_kit_expression`)
-- **Tone of Voice** — How the brand sounds
-- **Tone Dimensions** — Scales (e.g., formal ↔ casual)
-- **Voice Archetypes** — Archetypal voice patterns
-- **Verbal Style** — JSONB object with keys: `sentence_structure`, `vocabulary_level`, `punctuation_style`, and other language pattern preferences
-- **Visual Style** — JSONB object describing visual identity guidelines
-- **Preferred Terminology** — Words the brand uses (and avoids)
-- **Content Categories** — Platform-specific content guidance
-- **Situational Tone Guides** — Array of situational overrides with `situation`, `tone_adjustment`, `examples`
-- **Platform Voice Rules** — Array of platform-specific rules with `platform`, `rules`, `tone_overrides`
+| Section | Read with `sections:` | Write |
+|---|---|---|
+| Products and services | `["products"]` | `manage_product` |
+| Audience personas | `["audience"]` | `manage_audience_persona` |
+| AI personas | `["ai_personas"]` | `manage_ai_persona` |
+| Company ICPs | `["company_icps"]` | `manage_company_profile` |
+| Customers | `["customers"]` | `manage_company_profile` |
+| Competitors | `["competitors"]`, `["competitor_suggestions"]` | `manage_competitor` |
+| Partners | `["partners"]` | `manage_partner` |
+| Customer quotes | `["customer_quotes"]` | `manage_customer_quote` |
+| Objections | `["objections"]` | `manage_objection` |
+| Attack angles | `["attack_angles"]` | `manage_attack_angle` |
+| Anti-slop rules | `["anti_slop_rules"]` | `manage_anti_slop_rule` |
+| Expression examples | `["expression_examples"]` | `manage_expression_example` |
+| Logo assets | `["logo_assets"]` | `manage_logo_asset` |
+| Visual assets (image, video, audio) | `["visual_assets"]` | `manage_visual_asset` |
+| Knowledge files | `["knowledge_files"]`, then `get_knowledge_file` | `manage_knowledge_file` |
+| Social profiles | `["social_profiles"]` | `scrape_source` |
+| Content drafts | `["content_drafts"]` | `draft_brand_content` |
 
-### Products (`get_brand_kit_products` / `create_brand_kit_product` / `update_brand_kit_product`)
-Array of products/services, each with:
-- Name, description, type
-- Key benefits, USP, competitive differentiation
-- Cost and special pricing
+What the main collections hold:
 
-### Audience (`get_brand_kit_audience` / `update_audience_persona` / `generate_audience_persona`)
-Array of target audience personas, each with:
-- Demographics, goals, pain points
-- Buying behavior, preferred channels
-- Content that resonates
-- Core motivation
-- Representative quote
-- Professional context, personal background
-- Expertise level, platform behavior
-- **Aspirational Identity** — Who this persona aspires to become
-- **Show Don't Tell Scene** — A vivid scene depicting this persona
-- **Visual Identifiers** — Visual cues that identify this persona
-- **Funnel Stage Triggers** — What moves this persona between funnel stages
-- **Channel Behavior Matrix** — How this persona behaves across channels
-- **Paid Tools** — Tools and software this persona pays for
-- **Source** — How the persona was created (manual, ai_generated, imported)
+- **Products and services**: name, type, description, key benefits, USP, competitive differentiation, pricing, use cases.
+- **Audience personas**: demographics, goals, pain points, buying behavior, preferred channels, professional context, core motivation, representative quote. Allowed field values come from `get_reference` (`library: "persona_vocabulary"`).
+- **AI personas**: name, purpose, role definition, tasks, behavioral rules, tone overrides, guardrails. For a ready-to-use system prompt, call `get_brand_context_for_agent` with `output: "system_prompt"` and the `persona_name`.
+- **Competitors**: name, URL, description, positioning, target ICPs, when each was last verified.
+- **Anti-slop rules**: banned terms, AI-tell phrases, punctuation and structure rules, each hard or soft, optionally scoped to platforms. `check_draft` enforces them.
+- **Knowledge files**: supplementary documents (style guides, playbooks, research). Each has a relevance hint that says when to load it.
 
-### Governance (`get_brand_kit_governance` / `upsert_brand_kit_governance`)
-- **Behavioral Constraints** — What the brand must/must not do
-- **Negative Directory** — Blacklisted words, phrases, topics
-- **Compliance Notes** — Regulatory requirements (free text)
-- **Compliance Selections** — Array of selected compliance standards (GDPR, CCPA, etc.)
-- **Disclosure Policy** — AI and legal disclaimers (free text)
-- **Disclosure Statements** — Structured JSONB with `creation`, `transparency`, and `deployment` statement objects, each containing questions, answers, and approval status
-- **Writing Constraints** — Structured JSONB object with keys like `max_sentence_length`, `active_voice_preference`, `readability_target`, formatting and structural rules
-- **Usage Guidelines** — How brand assets should be used
-- **Approval Workflows** — Content approval process configurations (JSONB array)
-- **Drift Prevention Prompts** — Prompts to keep AI outputs on-brand (JSONB array)
+### Generating and enriching
 
-### Personas (`get_brand_kit_personas` / `update_ai_persona` / `generate_ai_persona`)
-AI persona configurations for different use cases (e.g., customer support bot, social media manager). Each includes:
-- Name, purpose type, role definition
-- Tasks, behavioral rules, tone overrides
-- Voice profile, lexicon/syntax preferences
-- Safety compliance, negative guardrails
-- Execution protocol, interaction context
-- **Personality Description** — Free-text personality description
-- **Is Default** — Whether this is the default persona
-- **Reference Protocols** — How the persona handles citations and sources
+| Tool | Use |
+|---|---|
+| `scrape_source` | Pull from a website, product pages, a social profile or the content library |
+| `enrich_record` | Enrich one record (a product, persona, competitor, company profile) |
+| `generate_records` | Generate records such as audience personas, AI personas or company ICPs |
+| `create_brand_kit_from_url` | Build a new kit from a website |
+| `get_run` | Poll a job that returned a `run_id` |
 
-### Competitors (`get_brand_kit_competitors` / `create_brand_kit_competitor` / `update_brand_kit_competitor`)
-Array of competitor brands, each with:
-- Name, URL, description, tagline
-- Brand colors, fonts, typography
-- Brand personality, value propositions
-- Social profiles, design framework
-- Logo URL, color scheme
+### Checking and auditing
 
-### SEO (`get_brand_kit_seo` / `upsert_brand_kit_seo`)
-- **Keywords** — Target SEO keywords (JSONB array)
-- **Tags** — Content tags (JSONB array)
-- **Suggested Keywords** — AI-suggested keywords (JSONB array)
+| Tool | Use |
+|---|---|
+| `audit_brand_kit` | Completeness (default), next step, consistency, customer base, lookalikes, governance lint |
+| `check_draft` | Test a draft against the kit's writing rules |
+| `get_write_history` | See what recent writes changed, or verify a write persisted |
+| `doctor` | Check the connection when calls start failing |
 
-### Expression Examples (`list_expression_examples` / `create_expression_example`)
-Array of brand voice content samples, each with:
-- Platform (linkedin, twitter, email, blog, etc.)
-- Context type (post, reply, headline, caption, cta, etc.)
-- User response (the brand-voice example text)
-- Original content (what was being adapted)
-- Source (manual, ai_generated, imported)
+## Write rules
 
-### Social Profiles (`get_brand_kit_social_profiles`)
-Connected social media accounts with full metadata: platform, profile URL, bio, headline, followers, business category, etc.
-
-### Logo Assets (`list_logo_assets` / `get_logo_asset` / `update_logo_asset`)
-Array of logo variants, each with:
-- Asset key, label, URL/storage path
-- Description, long description, usage guidelines
-- File type, dimensions, size
-- Default flag, sort order
-
-### Knowledge Files (`list_knowledge_files` / `get_knowledge_file` / `upload_knowledge_file`)
-Supplementary documents attached to a brand kit (style guides, playbooks, etc.). Linked via `brand_kit_knowledge_files` to `library_knowledge_files`.
-
-## Write Tool Summary
-
-| Tool | Table | Action |
-|------|-------|--------|
-| `update_brand_kit` | `brand_kits` | Update name, description, tagline, website, social URLs, industry |
-| `update_brand_kit_visuals` | `brand_kits` | Update colors, fonts, spacing, logos |
-| `upsert_brand_kit_core` | `brand_kit_core` | Upsert mission, vision, story, promises, taglines, storytelling |
-| `upsert_brand_kit_personality` | `brand_kit_personality` | Upsert traits, values, principles, moods |
-| `upsert_brand_kit_expression` | `brand_kit_expression` | Upsert tone, voice, style, terminology, situational guides, platform rules |
-| `upsert_brand_kit_governance` | `brand_kit_governance` | Upsert constraints, negative dir, writing rules, workflows, drift prompts |
-| `upsert_brand_kit_seo` | `brand_kit_seo` | Upsert keywords, tags, suggested keywords |
-| `create_brand_kit_product` | `brand_kit_products` | Create product |
-| `update_brand_kit_product` | `brand_kit_products` | Update product |
-| `update_audience_persona` | `brand_kit_target_audience` | Update audience persona |
-| `generate_audience_persona` | `brand_kit_target_audience` | AI-generate audience persona (1 token) |
-| `update_ai_persona` | `brand_kit_personas` | Update AI persona |
-| `generate_ai_persona` | `brand_kit_personas` | AI-generate AI persona (1 token) |
-| `create_expression_example` | `expression_examples` | Create expression example |
-| `create_brand_kit_competitor` | `brand_kit_competitors` | Create competitor |
-| `update_brand_kit_competitor` | `brand_kit_competitors` | Update competitor |
-| `update_logo_asset` | `brand_kit_logo_assets` | Update logo asset metadata |
-| `upload_knowledge_file` | `user_knowledge_file_uploads` | Upload knowledge file |
-
-All write tools support `dry_run: true` for previewing changes before committing. All require the `brand_kit:write` scope (except `upload_knowledge_file` which requires `knowledge_files:write`).
+1. **Preview first.** Call every write with `dry_run: true`, show the user the preview, and commit only after they approve.
+2. **Confirmation.** Accounts can require explicit confirmation. When they do, the commit call needs `confirm: true` and no `dry_run`. `get_agent_briefing` reports this under `account_settings`. For many writes, get one approval and use `approve_write_batch`.
+3. **Credits.** Jobs that spend credits (scrapes, enrichment, generation, kit creation) always need the preview and then `confirm: true`.
+4. **Provenance.** Send `basis` on every write (for example `customer_stated`, `operator_stated`, `page_verbatim`, `scrape_inferred`, `document`, `ai_inferred`), with `source_ref` when there is a URL or file behind it.
+5. **Review queue.** Some writes are staged for a person to approve instead of being written. The response says so. Tell the user it is waiting in their review queue and do not retry.
+6. **No hard deletes.** `archive_records` archives and restores. Nothing is deleted.
