@@ -15,21 +15,22 @@ Reviews existing content against brand standards to identify alignment gaps, voi
 
 ## Workflow
 
-1. **Load brand context** — Call `get_brand_kit_expression` and `get_brand_kit_governance` to establish the review baseline
+1. **Load brand context** — Call `get_brand_kit` with `sections: ["expression", "governance", "anti_slop_rules"]` to establish the review baseline
 2. **Identify content type** — Determine format (email, social, blog, ad) and target audience to select appropriate tone expectations
-3. **Evaluate against checklist** — Run through each item in `skills/brand-voice-enforcement/references/enforcement-checklist.md`
-4. **Score each dimension** — Rate voice compliance, tone alignment, terminology usage, governance adherence
-5. **Provide actionable feedback** — For each finding, cite the specific guideline and suggest a concrete fix
-6. **Summarize** — Overall assessment with priority-ordered recommendations
+3. **Run the automated check** — Call `check_draft` on the content (with the `platform` if known) and include its hard and soft violations in the findings
+4. **Evaluate against checklist** — Run through each item in `skills/brand-voice-enforcement/references/enforcement-checklist.md`
+5. **Score each dimension** — Rate voice compliance, tone alignment, terminology usage, governance adherence
+6. **Provide actionable feedback** — For each finding, cite the specific guideline and suggest a concrete fix
+7. **Summarize** — Overall assessment with priority-ordered recommendations
 
 ## MCP tools used
 
 | Tool | Purpose |
 |------|---------|
-| `get_brand_kit_expression` | Voice rules, tone dimensions, preferred terminology |
-| `get_brand_kit_governance` | Constraints, negative directory, compliance rules |
-| `get_brand_kit_audience` | Persona context for audience-targeted content |
-| `get_brand_kit_summary` | Quick brand overview for initial orientation |
+| `get_brand_kit` with `sections: ["expression", "governance", "anti_slop_rules"]` | Voice rules, tone dimensions, terminology, constraints, negative directory, compliance, anti-slop rules |
+| `check_draft` | Deterministic check of the content against the kit's writing rules |
+| `get_brand_kit` with `sections: ["audience"]` | Persona context for audience-targeted content |
+| `get_brand_kit` with no `sections` | Quick brand overview for initial orientation |
 
 ## Output format
 

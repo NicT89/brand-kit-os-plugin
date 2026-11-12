@@ -3,7 +3,7 @@ description: Generate brand-aligned content for a specified content type, audien
 argument-hint: <content type> for <audience> about <topic>
 ---
 
-# /brand-kit:create-content
+# /brand-kit-os:create-content
 
 Generate brand-aligned content for a specified content type, audience, and topic using Brand Kit OS data.
 
@@ -16,22 +16,22 @@ Generate brand-aligned content for a specified content type, audience, and topic
 
 ## Workflow
 
-1. **Identify brand kit** — Call `get_brand_kit_summary` for the active brand. If multiple kits exist, call `list_brand_kits` and ask the user which to use.
+1. **Identify brand kit** — Call `get_agent_briefing` with no arguments to list the user's kits. If there is more than one, ask the user which to use.
 2. **Parse arguments** — Extract content type, audience, and topic from the user's input. If any are missing, ask before proceeding.
 3. **Load relevant sections** — Based on the content type:
-   - Always: `get_brand_kit_expression` + `get_brand_kit_governance`
-   - If audience specified: `get_brand_kit_audience`
-   - If product-focused: `get_brand_kit_products`
-   - If persona-driven: `get_brand_kit_personas`
+   - Always: `get_brand_kit` with `sections: ["expression", "governance", "anti_slop_rules"]`
+   - If audience specified: `get_brand_kit` with `sections: ["audience"]`
+   - If product-focused: `get_brand_kit` with `sections: ["products"]`
+   - If persona-driven: `get_brand_kit` with `sections: ["ai_personas"]`
 4. **Delegate to content-generation agent** — Pass brand context, content requirements, and audience details for generation.
 5. **Adapt for audience** — If a specific persona is targeted, delegate to the audience-adaptation agent for persona-specific tuning.
-6. **Validate** — Run the quality-assurance agent to check compliance before delivery.
+6. **Validate** — Run `check_draft` on the draft, then the quality-assurance agent, before delivery.
 7. **Present** — Deliver the content with brand application notes explaining voice, tone, and terminology choices.
 8. **Offer next steps** — Suggest variations (different audience, platform, or tone), batch generation, or content review.
 
 ## When no brand kit is found
 
-If `list_brand_kits` returns no results, inform the user:
+If `get_agent_briefing` lists no brand kits, inform the user:
 > "No brand kits found. Create a brand kit at brandkitos.com to start generating brand-aligned content."
 
 ## Rules

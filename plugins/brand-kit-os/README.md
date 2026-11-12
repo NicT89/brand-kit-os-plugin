@@ -37,7 +37,7 @@ The connection renews itself, so you only sign in once.
 
 ### Updating
 
-Run `/plugin marketplace update brand-kit-os` to pull the latest version.
+Run `/plugin marketplace update brand-kit-os` to pull the latest version. Releases are listed in [CHANGELOG.md](../../CHANGELOG.md).
 
 ## Components
 
@@ -62,16 +62,17 @@ Once connected, Claude can use the full Brand Kit OS tool set, starting with:
 |------|-------------|
 | `get_agent_briefing` | Start here: lists your brand kits, or gives one kit's health and recommended next steps |
 | `list_brand_kits` | List all brand kits you have access to |
-| `get_brand_kit_expression` | Tone of voice, verbal style, and archetypes |
-| `get_brand_kit_governance` | Constraints, taboo topics, and compliance |
-| `get_brand_kit_audience` | Target audience personas |
-| `get_brand_kit_products` | Products and services |
+| `get_brand_kit` | Read any part of a kit. Ask for the sections you need: expression, governance, audience, products, and more |
+| `get_brand_context_for_agent` | One call that assembles the context a task needs, such as writing for a given platform |
+| `check_draft` | Test a draft against the kit's writing rules before you use it |
+| `audit_brand_kit` | Score the kit and list what to fix |
+| `update_brand_kit` | Edit the kit. Every change is previewed before it is saved |
 
 See the [developer documentation](https://brandkitos.com/documentation) for the complete list.
 
 ## Publishing to Leafpad
 
-For blog publishing, topic research, and content calendars on Leafpad, install the companion plugin instead: [brand-kit-os-plugin-leafpad](https://github.com/NicT89/brand-kit-os-plugin-leafpad). It includes everything in this plugin plus the Leafpad workflows.
+Blog publishing, topic research, and content calendars on Leafpad live in a separate plugin: [brand-kit-os-plugin-leafpad](https://github.com/NicT89/brand-kit-os-plugin-leafpad). It is maintained and versioned on its own.
 
 ## Usage Examples
 
