@@ -1,0 +1,13 @@
+{
+  "name": "brand-kit-os-labs",
+  "version": "0.1.0",
+  "description": "Experimental Brand Kit OS skills. Opt in to try new skills before they move into the main plugin. Requires the brand-kit-os plugin.",
+  "author": {
+    "name": "Brand Kit OS",
+    "url": "https://brandkitos.com"
+  },
+  "homepage": "https://brandkitos.com",
+  "repository": "https://github.com/NicT89/brand-kit-os-plugin",
+  "keywords": ["brand", "brand-kit", "mission", "vision", "audit", "experimental"],
+  "dependencies": ["brand-kit-os"]
+}
