@@ -24,20 +24,20 @@ Revert the merge on a branch, bump the patch version, and merge. A rollback is a
 
 ## Feature flags
 
-A plugin has no on/off switches of its own: if a skill file is in the released plugin, every user has it. So new work is gated in one of three ways, depending on what is being gated.
+A plugin has no on/off switches of its own: if a skill file is in the released plugin, every user has it. So new work is gated in one of two ways, depending on what is being gated. Both use this one repository and the one marketplace address, `NicT89/brand-kit-os-plugin`.
 
 | What you are gating | How | Who gets it |
 |---|---|---|
 | A capability that runs on the server (a new MCP tool, a new enrichment) | Flag it in the Brand Kit OS server, per account | Accounts with the flag |
-| An experimental skill, agent or command | Ship it in a separate `brand-kit-os-labs` plugin in this same marketplace | People who choose to install Labs |
-| A pre-release of the whole plugin | A `beta` branch that testers add as its own marketplace | Testers only |
+| An experimental skill, agent or command | Ship it in a `brand-kit-os-labs` plugin listed in this same marketplace | People who choose to install Labs |
 
 Rules that make this work:
 
 - **Skills must degrade gracefully.** Every skill names the MCP tools it needs. If one is missing from the session (because the server flag is off for that account), the skill says what it could not do and carries on. It never invents data.
 - **Labs graduates by moving.** When an experimental skill is ready, move its folder from the Labs plugin into `plugins/brand-kit-os/` and bump the minor version of both.
 - **Labs is created with its first skill.** An empty plugin would appear in the marketplace with nothing in it, so the Labs plugin is added in the same pull request as the first experimental skill.
-- **Channels need distinct versions.** If `beta` and `main` carry the same version number, Claude treats them as identical. Use a pre-release version on `beta` (for example `0.5.0-beta.1`).
+- **One address, two plugins.** Anyone who has added this marketplace sees both `brand-kit-os` and `brand-kit-os-labs` in the same list. There is no second repository and no beta branch to add. A branch-based beta channel was considered and left out, because testers would have to add the marketplace a second time pinned to that branch.
+- **Labs has its own version.** It is bumped whenever a Labs skill changes, the same way as the main plugin.
 
 ## Release checklist
 

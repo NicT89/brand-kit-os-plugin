@@ -17,7 +17,7 @@ All notable changes to the Brand Kit OS plugin are recorded here. Versions follo
 - The README no longer says the Leafpad plugin includes this one. The two are separate plugins with separate releases.
 
 ### Added
-- `CHANGELOG.md` and `RELEASING.md` (versioning, release steps and how new features are gated).
+- `CHANGELOG.md` and `RELEASING.md` (versioning, release steps and how new features are gated: server-side flags, plus a Labs plugin listed in this same marketplace).
 - `scripts/validate_plugin.py` and a GitHub Actions check. It fails a pull request if the manifests disagree on the version, if the changelog has no entry for it, or if any file names an MCP tool that is not in `scripts/mcp-tools.txt`.
 
 ## 0.4.0
