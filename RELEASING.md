@@ -10,12 +10,12 @@ Reference: [Claude plugin marketplaces](https://code.claude.com/docs/en/plugin-m
 ## Version control
 
 1. **Never commit to `main` directly.** Work on a branch and open a pull request.
-2. **One version, three places.** `plugins/brand-kit-os/.claude-plugin/plugin.json`, and both `version` fields in `.claude-plugin/marketplace.json`, must match. The check fails if they do not.
+2. **Versions must match.** For the main plugin, `plugins/brand-kit-os/.claude-plugin/plugin.json`, its entry in `.claude-plugin/marketplace.json` and the marketplace's `metadata.version` must all agree. For Labs, its `plugin.json` and its marketplace entry must agree. The check fails if they do not.
 3. **Semantic versioning.**
    - Patch (0.4.0 to 0.4.1): fixes, wording, tool-name corrections.
    - Minor (0.4.1 to 0.5.0): a new skill, agent or command.
    - Major: a change that breaks existing use, such as removing a command.
-4. **Changelog.** Every version gets an entry in `CHANGELOG.md` saying what changed in plain language.
+4. **Changelog.** Every version gets an entry in `CHANGELOG.md` saying what changed in plain language. Main plugin entries are headed `## <version>`. Labs entries are headed `## brand-kit-os-labs <version>`.
 5. **Tag after merge.** Tag the merge commit `brand-kit-os--v<version>` (for example `brand-kit-os--v0.4.1`). This is the tag format Claude's plugin tooling uses, and it gives you a commit to roll back to.
 
 ### Rolling back
@@ -35,14 +35,14 @@ Rules that make this work:
 
 - **Skills must degrade gracefully.** Every skill names the MCP tools it needs. If one is missing from the session (because the server flag is off for that account), the skill says what it could not do and carries on. It never invents data.
 - **Labs graduates by moving.** When an experimental skill is ready, move its folder from the Labs plugin into `plugins/brand-kit-os/` and bump the minor version of both.
-- **Labs is created with its first skill.** An empty plugin would appear in the marketplace with nothing in it, so the Labs plugin is added in the same pull request as the first experimental skill.
+- **Labs lives in `plugins/brand-kit-os-labs/`.** It declares the main plugin as a dependency and has no server connection of its own, so users sign in once.
 - **One address, two plugins.** Anyone who has added this marketplace sees both `brand-kit-os` and `brand-kit-os-labs` in the same list. There is no second repository and no beta branch to add. A branch-based beta channel was considered and left out, because testers would have to add the marketplace a second time pinned to that branch.
 - **Labs has its own version.** It is bumped whenever a Labs skill changes, the same way as the main plugin.
 
 ## Release checklist
 
 - [ ] Branch and pull request, not a direct commit
-- [ ] Version bumped in all three places
+- [ ] Version bumped everywhere it appears for the plugin you changed
 - [ ] `CHANGELOG.md` entry written
 - [ ] `python3 scripts/validate_plugin.py` passes
 - [ ] If the MCP server gained or lost tools, `scripts/mcp-tools.txt` is updated to match

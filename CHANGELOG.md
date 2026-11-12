@@ -1,6 +1,14 @@
 # Changelog
 
-All notable changes to the Brand Kit OS plugin are recorded here. Versions follow [semantic versioning](https://semver.org). The version in `plugin.json` is what Claude uses to decide whether an installed copy needs updating, so every release bumps it.
+All notable changes to the Brand Kit OS plugins are recorded here. Entries for the main plugin are headed with the version alone. Entries for another plugin are headed with its name and version. Versions follow [semantic versioning](https://semver.org). The version in `plugin.json` is what Claude uses to decide whether an installed copy needs updating, so every release bumps it.
+
+## brand-kit-os-labs 0.1.0 (2026-11-12)
+
+First release of the Labs plugin: experimental skills you opt into, listed in the same marketplace as the main plugin.
+
+### Added
+- `mission-vision-builder` skill and `/brand-kit-os-labs:mission-vision` command. Creates or rewrites a mission and vision from the brand kit: reads the kit, finds the customer, pains, enemy and feeling, drafts four missions and two or three visions, tests each one, and saves only after approval.
+- `kit-audit` skill and `/brand-kit-os-labs:audit-kit` command. Runs the kit audit and routes each gap to the skill or tool that fixes it.
 
 ## 0.4.1 (2026-11-12)
 
