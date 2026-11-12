@@ -14,7 +14,7 @@ Load brand guidelines from Brand Kit OS and apply them to the content request pr
 3. **Analyze the request** — Determine content type, target audience, platform, and key messages from the user's input.
 4. **Load audience context** (if applicable) — If the request targets a specific persona, call `get_brand_kit` with `sections: ["audience"]` and delegate to the audience-adaptation agent.
 5. **Generate content** — Apply voice constants (archetypes, verbal style) and calibrate tone dimensions for the content type and platform. Delegate to the content-generation agent for complex or long-form requests.
-6. **Validate** — Run `check_draft` on the output, then the quality-assurance agent against the enforcement checklist, before presenting.
+6. **Validate** — Run `check_draft` on the output, then the quality-assurance agent against the enforcement checklist, before presenting. If `check_draft` reports a hard violation or QA returns Needs Revision, revise the content and run both checks again. If QA returns Fail, explain the findings to the user instead of presenting the content as final. Present only after both checks pass.
 7. **Present** — Deliver the content with a brief explanation of brand choices made. Note any governance constraints that shaped the output.
 8. **Offer refinement** — Ask if the user wants adjustments, alternative approaches, or adaptation for a different audience.
 

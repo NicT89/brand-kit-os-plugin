@@ -25,7 +25,7 @@ Generate brand-aligned content for a specified content type, audience, and topic
    - If persona-driven: `get_brand_kit` with `sections: ["ai_personas"]`
 4. **Delegate to content-generation agent** — Pass brand context, content requirements, and audience details for generation.
 5. **Adapt for audience** — If a specific persona is targeted, delegate to the audience-adaptation agent for persona-specific tuning.
-6. **Validate** — Run `check_draft` on the draft, then the quality-assurance agent, before delivery.
+6. **Validate** — Run `check_draft` on the draft, then the quality-assurance agent, before delivery. If `check_draft` reports a hard violation or QA returns Needs Revision, revise the draft and run both checks again. If QA returns Fail, explain the findings to the user instead of delivering the draft as final. Deliver only after both checks pass.
 7. **Present** — Deliver the content with brand application notes explaining voice, tone, and terminology choices.
 8. **Offer next steps** — Suggest variations (different audience, platform, or tone), batch generation, or content review.
 

@@ -39,9 +39,18 @@ if marketplace and manifest:
         "plugin.json": version,
         "marketplace.json metadata.version": marketplace.get("metadata", {}).get("version"),
     }
-    for entry in marketplace.get("plugins", []):
-        if entry.get("name") == manifest.get("name"):
-            found["marketplace.json plugins[].version"] = entry.get("version")
+    matches = [
+        entry
+        for entry in marketplace.get("plugins", [])
+        if entry.get("name") == manifest.get("name")
+    ]
+    if len(matches) != 1:
+        errors.append(
+            f"marketplace.json must list '{manifest.get('name')}' exactly once "
+            f"(found {len(matches)})"
+        )
+    else:
+        found["marketplace.json plugins[].version"] = matches[0].get("version")
     if len(set(found.values())) != 1:
         errors.append(f"version mismatch: {found}")
     if not version or not re.fullmatch(r"\d+\.\d+\.\d+(-[0-9A-Za-z.]+)?", version):
@@ -88,7 +97,8 @@ VERBS = (
     "get|list|update|upsert|create|delete|manage|generate|audit|scrape|enrich|"
     "archive|review|check|draft|approve|batch|upload|recompute"
 )
-token = re.compile(rf"`((?:{VERBS})_[a-z0-9_]+)`")
+# Matches a bare name (`get_brand_kit`) and an inline call (`get_brand_kit({...})`).
+token = re.compile(rf"`((?:{VERBS})_[a-z0-9_]+)(?=`|\()")
 # Backticked words that look like tools but are argument values or fields.
 NOT_TOOLS = {"create_upload_url", "draft_text", "scrape_inferred"}
 

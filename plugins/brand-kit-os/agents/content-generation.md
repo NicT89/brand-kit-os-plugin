@@ -15,7 +15,7 @@ Generates brand-aligned content by loading brand guidelines via MCP and applying
 
 ## Workflow
 
-1. **Load brand context** — Call `get_brand_context_for_agent` with `task_type: "content_generation"` and the target `platform` for voice, governance, examples and audience in one call. To load sections individually, use `get_brand_kit` with `sections: ["expression", "governance", "anti_slop_rules"]`, and `get_brand_kit` with `sections: ["audience"]` if targeting a specific persona
+1. **Load brand context** — Call `get_brand_context_for_agent` with `task_type: "content_generation"` and the target `platform` for voice, governance, examples and audience in one call. To load sections individually, use `get_brand_kit` with `sections: ["expression", "governance", "anti_slop_rules"]`, and `get_brand_kit` with `sections: ["audience"]` if targeting a specific persona. When the content is for a specific platform, also load `get_brand_kit` with `sections: ["platform_expressions"]` and the `platform`, so that platform's overrides are in context
 2. **Parse guidelines** — Identify tone dimensions, voice archetypes, preferred terminology, negative directory entries, anti-slop rules, and any overrides for the target platform
 3. **Plan content** — Map which guidelines apply to each section; plan where key messages and terminology naturally fit
 4. **Generate** — Write content that incorporates brand voice, uses preferred terms, avoids prohibited terms, and matches the tone dimensions
